@@ -1,0 +1,176 @@
+﻿<Window x:Class="SuperheroesCommand.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SuperheroesCommand"
+        mc:Ignorable="d"
+        Title="Superhéroes"
+        Height="700"
+        Width="1000"
+        MinHeight="500"
+        MinWidth="700"
+        Background="AliceBlue"
+        Icon="assets/shield.ico">
+    <Window.Resources>
+        <Style TargetType="DockPanel" x:Key="StContenedor">
+            <Setter Property="Background" Value="IndianRed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=HeroeActual.Heroe}" Value="true">
+                    <Setter Property="Background" Value="PaleGreen"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Image" x:Key="StBandoX">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=HeroeActual.Xmen}" Value="true">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Image" x:Key="StBandoA">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=HeroeActual.Vengador}" Value="true">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Image" x:Key="StHeroe">
+            <Setter Property="Opacity" Value="0.5"/>
+            <Style.Triggers>
+                <DataTrigger  Binding="{Binding ElementName=bordeHeroe, Path=BorderThickness}" Value="5">
+                    <Setter Property="Opacity" Value="1"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Border" x:Key="StHeroeBorde">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderThickness" Value="5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="StNombreHeroe">
+            <Setter Property="FontSize" Value="40"/>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="FontSize" To="50" Duration="0:0:0.5"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="FontSize" To="40" Duration="0:0:0.5"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Image" x:Key="flechas">
+            <Setter Property="Width" Value="24"/>
+            <Setter Property="Source" Value="assets/arrow.png"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="contador">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding 
+            Command="{Binding Path=SiguienteCommand}"
+            Key="a" Modifiers="Ctrl"/>
+        <KeyBinding 
+            Command="{Binding Path=VolverCommand}"
+            Key="r" Modifiers="Ctrl"/>
+    </Window.InputBindings>
+
+
+
+    <DockPanel Style="{StaticResource StContenedor}">
+        <DockPanel LastChildFill="False"
+                DockPanel.Dock="Top">
+            <TextBlock Style="{StaticResource StNombreHeroe}"
+                DockPanel.Dock="Left"
+                VerticalAlignment="Bottom"
+                Foreground="White"
+                FontFamily="Segoe UI Black"
+                Margin="10,0,0,0"
+                Text="{Binding Path=HeroeActual.Nombre}">
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal"
+                DockPanel.Dock="Right"
+                VerticalAlignment="Bottom">
+
+                <Image Source="assets/avengers.png"
+                       Style="{StaticResource StBandoA}"
+                       Width="40"
+                        Margin="0,0,10,0"/>
+                <Image Source="assets/xmen.png"
+                       Style="{StaticResource StBandoX}"
+                       Width="60"/>
+            </StackPanel>
+        </DockPanel>
+
+        <StackPanel DockPanel.Dock="Bottom"
+                Orientation="Horizontal"
+                HorizontalAlignment="Center">
+            <Button 
+                Command="{Binding Path=VolverCommand}">
+                <Image x:Name="leftImage"
+                Style="{StaticResource flechas}"/>
+            </Button>
+            <TextBlock x:Name="actualTextBlock"
+                Style="{StaticResource contador}"
+                Margin="5,0,0,5"
+                Text="{Binding Path=Actual}"/>
+            <TextBlock Style="{StaticResource contador}"
+                Margin="0,0,0,5"
+                       Text="/"/>
+            <TextBlock x:Name="totalTextBlock"
+                Style="{StaticResource contador}"
+                Margin="0,0,5,5"
+                Text="{Binding Path=Total}"></TextBlock>
+            <Button
+                Command="{Binding Path=SiguienteCommand}">
+                <Image x:Name="rightImage"
+                Style="{StaticResource flechas}"
+                RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="1"
+                                                ScaleX="-1" />
+                            <SkewTransform AngleY="0"
+                                               AngleX="0" />
+                            <RotateTransform Angle="0" />
+                            <TranslateTransform />
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>
+            </Button>
+        </StackPanel>
+        <Border Name="bordeHeroe"
+                Margin="10,10,10,0" 
+             Style="{StaticResource StHeroeBorde}">
+            <Image 
+                Source="{Binding Path=HeroeActual.Imagen}"
+                Style="{StaticResource StHeroe}"
+                Stretch="UniformToFill"
+                Height="564" 
+                VerticalAlignment="Top"></Image>
+        </Border>
+
+    </DockPanel>
+</Window>
